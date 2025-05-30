@@ -1,61 +1,274 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# eLearnify
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## About Laravel
+eLearnify is a comprehensive, scalable, and secure e-learning backend API built with Laravel. It provides features for managing courses, videos, quizzes, certificates, users, and roles with dedicated APIs for administrators, instructors, and learners.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* [About](#about)
+* [Features](#features)
+* [Technology Stack](#technology-stack)
+* [Project Structure](#project-structure)
+* [API Endpoints Overview](#api-endpoints-overview)
+* [Installation and Setup](#installation-and-setup)
+* [Usage](#usage)
+* [Testing](#testing)
+* [Contributing](#contributing)
+* [License](#license)
+* [Contact](#contact)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## About
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+eLearnify is designed to empower online education platforms by providing a robust backend service with fine-grained role management, course content delivery, video lessons, quizzes, progress tracking, and certificate generation. It supports multiple user roles such as Admin, Instructor, and Learner with appropriate access control and functionality.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Features
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+* **User Authentication & Authorization**
 
-### Premium Partners
+  * User registration and login via Sanctum API tokens.
+  * Role-based access control (Admin, Instructor, Learner).
+  * Email verification and password reset.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+* **Course Management**
+
+  * Create, update, delete, and list courses.
+  * Organize content into videos and quizzes.
+
+* **Video Lessons**
+
+  * Upload and manage video lessons within courses.
+  * Track user progress per video.
+
+* **Quiz System**
+
+  * Create and manage quiz questions and options.
+  * Users can attempt quizzes with submission evaluation.
+  * Quiz attempt history per user.
+
+* **Certificate Generation**
+
+  * Automatic certificate creation for course completion.
+
+* **User Progress Tracking**
+
+  * Track progress on courses and videos.
+  * Provide APIs for progress retrieval and updates.
+
+* **Role Management**
+
+  * Admins can create, update, and delete roles.
+  * Manage user roles dynamically.
+
+* **Admin, Instructor, and Learner API Segregation**
+
+  * Separate API routes and controllers per role.
+  * Middleware to enforce role-specific access.
+
+---
+
+## Technology Stack
+
+* **Backend Framework:** Laravel (PHP)
+* **Authentication:** Laravel Sanctum (API Token based)
+* **Database:** MySQL (configurable)
+* **ORM:** Eloquent
+* **API Development:** RESTful API with Resource Controllers and API Resources
+* **Middleware:** Role-based Middleware for security
+* **Dependency Management:** Composer
+
+---
+
+## Project Structure
+
+```plaintext
+eLearnify/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/
+│   │   │   │   ├── AdminController.php
+│   │   │   │   ├── AuthController.php
+│   │   │   │   ├── CategoryController.php
+│   │   │   │   ├── CertificateController.php
+│   │   │   │   ├── CourseController.php
+│   │   │   │   ├── Instructor/ (Course, Question, Video controllers)
+│   │   │   │   ├── User/ (Course, Progress, Quiz, Video controllers)
+│   │   │   │   └── Other Controllers...
+│   │   ├── Middleware/ (AdminMiddleware, InstructorMiddleware, etc.)
+│   │   ├── Requests/ (Form Request Validation Classes)
+│   │   └── Resources/ (API Resources for JSON responses)
+│   ├── Models/ (Eloquent Models)
+│   ├── Services/ (CertificateGeneratorService.php)
+│   └── Providers/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── routes/
+│   └── api.php
+├── artisan
+├── composer.json
+└── README.md
+```
+
+---
+
+## API Endpoints Overview
+
+### Authentication
+
+| Method | Endpoint    | Description           |
+| ------ | ----------- | --------------------- |
+| POST   | `/register` | Register a new user   |
+| POST   | `/login`    | Login user, get token |
+| POST   | `/logout`   | Logout user           |
+
+### User APIs (Authenticated)
+
+* Courses list and detail
+* Enroll in courses
+* Fetch enrolled courses and progress
+* Mark video as complete
+* Get videos and quizzes
+* Submit quiz answers
+* View quiz attempts
+
+### Instructor APIs (Authenticated & Instructor Role)
+
+* Manage courses, videos, quiz questions, and options
+
+### Admin APIs (Authenticated & Admin Role)
+
+* User management (list, update, delete)
+* Role management (CRUD)
+* Manage categories, courses, videos, questions, quiz attempts, certificates, and user progress
+
+**Full route details are defined in `routes/api.php` and guarded with middleware to ensure proper role-based access.**
+
+---
+
+## Installation and Setup
+
+### Prerequisites
+
+* PHP 8.1 or higher
+* Composer
+* MySQL or any supported relational database
+* Laravel CLI (optional but recommended)
+
+### Steps
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/Ziad-Abaza/eLearnify.git
+cd eLearnify
+```
+
+2. **Install dependencies**
+
+```bash
+composer install
+```
+
+3. **Copy `.env` file and configure**
+
+```bash
+cp .env.example .env
+```
+
+* Set your database credentials in `.env` file
+* Configure mail settings for email verification and password reset if needed
+
+4. **Generate application key**
+
+```bash
+php artisan key:generate
+```
+
+5. **Run migrations and seeders**
+
+```bash
+php artisan migrate --seed
+```
+
+6. **Serve the application**
+
+```bash
+php artisan serve
+```
+
+The API will be available at `http://localhost:8000/api`.
+
+---
+
+## Usage
+
+### Authentication
+
+* Register a user via `/register`
+* Login to obtain Sanctum API token
+* Use token in Authorization header (`Bearer <token>`) for protected routes
+
+### Accessing Endpoints
+
+* Use tools like Postman or integrate with frontend consuming APIs.
+* Admin, Instructor, and User routes are protected by middleware and require proper authentication and roles.
+
+### Role-Based Access
+
+| Role       | Permissions                                                |
+| ---------- | ---------------------------------------------------------- |
+| Admin      | Full access to manage users, roles, courses, quizzes, etc. |
+| Instructor | Manage their own courses, videos, and quizzes              |
+| Learner    | Browse courses, enroll, watch videos, attempt quizzes      |
+
+---
+
+## Testing
+
+Currently, automated tests are not included.
+To manually test, use API clients (Postman/Insomnia) and interact with routes as per role.
+
+---
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome and appreciated! Please follow these guidelines:
 
-## Code of Conduct
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request describing your changes
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Before contributing:**
 
-## Security Vulnerabilities
+* Follow PSR-12 coding standards
+* Write meaningful commit messages
+* Test your changes thoroughly
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contact
+
+For questions or feedback, you can reach out to:
+
+* **Ziad Abaza**
+* GitHub: [https://github.com/Ziad-Abaza](https://github.com/Ziad-Abaza)
+
