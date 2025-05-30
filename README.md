@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-eLearnify is a comprehensive, scalable, and secure e-learning backend API built with Laravel. It provides features for managing courses, videos, quizzes, certificates, users, and roles with dedicated APIs for administrators, instructors, and learners.
+eLearnify is a comprehensive, scalable, and secure e-learning backend API built with Laravel. It provides features for managing courses, videos, quizzes, certificates, users, and roles with dedicated APIs for administrators, instructors, and learners. This project now includes a frontend powered by **Vue.js** and **Tailwind CSS**, making it ready to be used as a full-stack solution for online education platforms.
 
 ---
 
@@ -14,6 +14,7 @@ eLearnify is a comprehensive, scalable, and secure e-learning backend API built 
 * [Project Structure](#project-structure)
 * [API Endpoints Overview](#api-endpoints-overview)
 * [Installation and Setup](#installation-and-setup)
+* [Frontend Setup (Vue + Tailwind CSS)](#frontend-setup-vue--tailwind-css)
 * [Usage](#usage)
 * [Testing](#testing)
 * [Contributing](#contributing)
@@ -26,9 +27,13 @@ eLearnify is a comprehensive, scalable, and secure e-learning backend API built 
 
 eLearnify is designed to empower online education platforms by providing a robust backend service with fine-grained role management, course content delivery, video lessons, quizzes, progress tracking, and certificate generation. It supports multiple user roles such as Admin, Instructor, and Learner with appropriate access control and functionality.
 
+This version integrates **Vue.js** for the frontend along with **Tailwind CSS** for styling, allowing developers to build dynamic and responsive educational interfaces seamlessly connected to the Laravel backend.
+
 ---
 
 ## Features
+
+### Backend
 
 * **User Authentication & Authorization**
 
@@ -71,9 +76,19 @@ eLearnify is designed to empower online education platforms by providing a robus
   * Separate API routes and controllers per role.
   * Middleware to enforce role-specific access.
 
+### Frontend (Vue + Tailwind CSS)
+
+* Vue 3 Composition API support
+* Tailwind CSS for utility-first styling
+* Vite for fast development server and hot module replacement (HMR)
+* Modular structure for reusable components and pages
+* Ready-to-integrate with Laravel backend APIs
+
 ---
 
 ## Technology Stack
+
+### Backend
 
 * **Backend Framework:** Laravel (PHP)
 * **Authentication:** Laravel Sanctum (API Token based)
@@ -82,6 +97,13 @@ eLearnify is designed to empower online education platforms by providing a robus
 * **API Development:** RESTful API with Resource Controllers and API Resources
 * **Middleware:** Role-based Middleware for security
 * **Dependency Management:** Composer
+
+### Frontend
+
+* **Framework:** Vue.js 3
+* **Styling:** Tailwind CSS
+* **Build Tool:** Vite
+* **Asset Management:** Vite with Laravel plugin
 
 ---
 
@@ -113,10 +135,19 @@ eLearnify/
 │   ├── factories/
 │   ├── migrations/
 │   └── seeders/
+├── resources/
+│   ├── css/
+│   │   └── app.css
+│   ├── js/
+│   │   └── app.js
+│   └── views/
+│       └── index.blade.php
 ├── routes/
 │   └── api.php
 ├── artisan
 ├── composer.json
+├── package.json
+├── vite.config.js
 └── README.md
 ```
 
@@ -163,6 +194,7 @@ eLearnify/
 * PHP 8.1 or higher
 * Composer
 * MySQL or any supported relational database
+* Node.js and npm/yarn
 * Laravel CLI (optional but recommended)
 
 ### Steps
@@ -170,17 +202,23 @@ eLearnify/
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/Ziad-Abaza/eLearnify.git
+git clone https://github.com/Ziad-Abaza/eLearnify.git  
 cd eLearnify
 ```
 
-2. **Install dependencies**
+2. **Install backend dependencies**
 
 ```bash
 composer install
 ```
 
-3. **Copy `.env` file and configure**
+3. **Install frontend dependencies**
+
+```bash
+npm install
+```
+
+4. **Copy `.env` file and configure**
 
 ```bash
 cp .env.example .env
@@ -189,25 +227,74 @@ cp .env.example .env
 * Set your database credentials in `.env` file
 * Configure mail settings for email verification and password reset if needed
 
-4. **Generate application key**
+5. **Generate application key**
 
 ```bash
 php artisan key:generate
 ```
 
-5. **Run migrations and seeders**
+6. **Run migrations and seeders**
 
 ```bash
 php artisan migrate --seed
 ```
 
-6. **Serve the application**
+7. **Serve the application using Vite**
 
 ```bash
-php artisan serve
+npm run dev
 ```
 
-The API will be available at `http://localhost:8000/api`.
+The frontend will be available at `http://localhost:5173`, while the Laravel backend runs at `http://localhost:8000`.
+
+---
+
+## Frontend Setup (Vue + Tailwind CSS)
+
+### Vite Configuration (`vite.config.js`)
+
+```js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+    plugins: [
+        tailwindcss(),
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
+    ],
+});
+```
+
+### Tailwind CSS Setup
+
+Ensure you have a `tailwind.config.js` file:
+
+```js
+module.exports = {
+  content: [
+    './resources/**/*.blade.php',
+    './resources/**/*.vue',
+    './resources/**/*.js',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
 
 ---
 
@@ -238,6 +325,8 @@ The API will be available at `http://localhost:8000/api`.
 
 Currently, automated tests are not included.
 To manually test, use API clients (Postman/Insomnia) and interact with routes as per role.
+
+For the frontend, test UI interactions and API integrations using browser developer tools and inspect network requests to verify correct behavior.
 
 ---
 
@@ -271,4 +360,3 @@ For questions or feedback, you can reach out to:
 
 * **Ziad Abaza**
 * GitHub: [https://github.com/Ziad-Abaza](https://github.com/Ziad-Abaza)
-
